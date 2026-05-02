@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: diploma_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: diploma_finance
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d diploma_finance"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: diploma_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/diploma_finance
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
+      AES_SECRET: ${AES_SECRET}
+      BINANCE_API_KEY: ${BINANCE_API_KEY:-}
+      BINANCE_API_SECRET: ${BINANCE_API_SECRET:-}
+      BINANCE_BASE_URL: ${BINANCE_BASE_URL:-https://api.binance.com}
+      BLOCKSCAN_API_KEY: ${BLOCKSCAN_API_KEY:-}
+      BLOCKSCAN_BASE_URL: ${BLOCKSCAN_BASE_URL:-https://api.etherscan.io/v2/api}
+      BLOCKSCAN_CHAIN_ID: ${BLOCKSCAN_CHAIN_ID:-1}
+      MONOBANK_TOKEN: ${MONOBANK_TOKEN:-}
+      MONOBANK_BASE_URL: ${MONOBANK_BASE_URL:-https://api.monobank.ua}
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:3000
+    container_name: diploma_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,13 @@
+.env
+.tmp_docx/
+*.log
+
+backend/node_modules/
+backend/dist/
+backend/coverage/
+backend/.nestjs/
+
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vite/
