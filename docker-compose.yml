@@ -32,13 +32,10 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
       AES_SECRET: ${AES_SECRET}
-      BINANCE_API_KEY: ${BINANCE_API_KEY:-}
-      BINANCE_API_SECRET: ${BINANCE_API_SECRET:-}
       BINANCE_BASE_URL: ${BINANCE_BASE_URL:-https://api.binance.com}
       BLOCKSCAN_API_KEY: ${BLOCKSCAN_API_KEY:-}
       BLOCKSCAN_BASE_URL: ${BLOCKSCAN_BASE_URL:-https://api.etherscan.io/v2/api}
       BLOCKSCAN_CHAIN_ID: ${BLOCKSCAN_CHAIN_ID:-1}
-      MONOBANK_TOKEN: ${MONOBANK_TOKEN:-}
       MONOBANK_BASE_URL: ${MONOBANK_BASE_URL:-https://api.monobank.ua}
     ports:
       - "3000:3000"

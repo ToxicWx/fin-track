@@ -1,6 +1,7 @@
 .env
 .tmp_docx/
 *.log
+*.tsbuildinfo
 
 backend/node_modules/
 backend/dist/
